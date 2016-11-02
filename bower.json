@@ -1,0 +1,13 @@
+{
+  "name": "tuintracallup",
+  "authors": "tuintra",
+  "description": "Callup module for tuintra",
+  "keywords": [
+    "kingofapp",
+    "module"
+  ],
+  "license": "MIT",
+  "homepage": "www.tuintra.com",
+  "private": true,
+  "dependencies": {}
+}

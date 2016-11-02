@@ -1,0 +1,50 @@
+{
+  "name": "tuintracallup",
+  "identifier": "tuintracallup",
+  "description": {
+    "es-ES": "Módulo de convocatorias para tuintra",
+    "en-US": "Callup module for tuintra"
+  },
+  "documentation": {
+    "es-ES": "",
+    "en-US": ""
+  },
+  "descriptionShort": {
+    "es-ES": "Módulo de convocatorias para tuintra",
+    "en-US": "Callup module for tuintra"
+  },
+  "icon": "room",
+  "type": "A",
+  "version": "0.0.1",
+  "author": "tuintra",
+  "category": ["koapp","tuintra","callup","game","team","coach","time","hockey","soccer","basketball","voleyball"],
+  "price": 0,
+  "subscription": false,
+  "canContain": false,
+  "platforms": [
+    "android",
+    "ios",
+    "windows"
+  ],
+  "view": "modules/tuintracallup/index.html",
+  "files": [
+    "modules/tuintracallup/controller.js", "modules/tuintracallup/style.html"
+  ],
+  "scope": {"demoKey": "demo text"},
+  "libs": [],
+  "config": [],
+  "showOn": {
+    "menu": true,
+    "market": true,
+    "dragDrop": true
+  },
+  "images": {
+    "list": "modules/tuintracallup/images/list.png",
+    "screenshots": [
+      "modules/tuintracallup/images/screenshot01.png"
+    ],
+    "popover": "modules/tuintracallup/images/popover.png",
+    "banner": "modules/tuintracallup/images/banner.png",
+    "logo": "modules/tuintracallup/images/logo.png"
+  }
+}
