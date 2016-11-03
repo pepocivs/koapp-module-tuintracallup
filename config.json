@@ -34,14 +34,16 @@
   "libs": [],
   "config": [],
   "showOn": {
-    "menu": true,
-    "market": true,
-    "dragDrop": true
+    "menu": false,
+    "market": false,
+    "dragDrop": false
   },
   "images": {
     "list": "modules/tuintracallup/images/list.png",
     "screenshots": [
-      "modules/tuintracallup/images/screenshot01.png"
+      "modules/tuintracallup/images/screenshot01.png",
+	  "modules/tuintracallup/images/screenshot02.png",
+	  "modules/tuintracallup/images/screenshot03.png"
     ],
     "popover": "modules/tuintracallup/images/popover.png",
     "banner": "modules/tuintracallup/images/banner.png",
