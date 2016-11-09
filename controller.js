@@ -10,8 +10,7 @@
   function loadFunction($scope, structureService, $location) {
     // Register upper level modules
     structureService.registerModule($location, $scope, 'tuintracallup');
-    // --- Start tuintracallupController content ---
-    console.info('Hi! from tuintracallupController');
-    // --- End tuintracallupController content ---
+
+
   }
 }());

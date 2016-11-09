@@ -28,7 +28,8 @@
   ],
   "view": "modules/tuintracallup/index.html",
   "files": [
-    "modules/tuintracallup/controller.js", "modules/tuintracallup/style.html"
+    "modules/tuintracallup/controller.js",
+    "modules/tuintracallup/style.CSS"
   ],
   "scope": {"demoKey": "demo text"},
   "libs": [],
