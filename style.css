@@ -1,0 +1,14 @@
+.rounded {
+  padding: 0px;
+  margin-bottom: 0.29em;
+  width: 82px;
+  height: 82px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+}
+.rounded img {
+  display: inline;
+  margin: 0 auto;
+  width: auto;
+}

@@ -6,24 +6,44 @@
   <koa-toolbar>
     <koa-icon-button icon="arrow-back" ng-click="backButton()"></koa-icon-button>
     <span class="title" translate>tuintra-callup.title</span>
+    <!--
+    <koa-dropdown-menu label="{{ 'tuintra-callup.teams' | translate}}">
+      <koa-listbox class="dropdown-content">
+        <koa-item></koa-item>
+      </koa-listbox>
+    </koa-dropdown-menu>
+    -->
 
   </koa-toolbar>
 
+  <select ng-change="setTeamFilter()" ng-model="teamId">
+    <option ng-repeat="team in teams"
+      ng-selected="team._id === teamId"
+      value="{{team._id}}">
+      {{team.teamName}} ({{team.category}} {{team.gender}})
+    </option>
+  </select>
+  <hr />
 
-
-  <koa-dropdown-menu label="{{ 'tuintra-callup.teams' | translate}}">
-    <koa-listbox class="dropdown-content">
-      <koa-item is="dom-repeat" items="{{teams}}"
-        ng-click="setTeamFilter('{{team._id}}')">
-        {{team.teamName}}
-      </koa-item>
-    </koa-listbox>
-  </koa-dropdown-menu>
-
-  <pre>
-    {{callup}}
-  </pre>
-  <pre>
-    {{players}}
-  </pre>
+  <koa-button
+          ng-repeat="called in callup.players"
+          title="{{called.name.public}}"
+          ng-if="called.playerData.picture && called.showPicture"
+          value="{{called.name.public}}"
+          class="rounded"
+          ng-click="selectPlayer('{{called._id}}')">
+          <img src="{{called.playerData.picture}}" />
+          {{player.name.public}}
+  </koa-button>
+  <hr />
+  <koa-button
+          ng-repeat="player in players"
+          title="{{player.name.public}}"
+          ng-if="player.playerData.picture && player.showPicture"
+          value="{{player.name.public}}"
+          ng-click="selectPlayer('{{player._id}}')"
+          class="rounded">
+          <img src="{{player.playerData.picture}}" />
+          {{player.name.public}}
+  </koa-button>
 </div>

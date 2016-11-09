@@ -5,28 +5,28 @@
     .module('tuintracallup', [])
     .controller('tuintracallupController', loadFunction);
 
-  loadFunction.$inject = ['$rootScope', '$scope', '$location', '$http',
+  loadFunction.$inject = ['$rootScope', '$scope', '$location', '$http', '$window',
                           'structureService', 'storageService'];
 
-  function loadFunction($rootScope, $scope, $location, $http,
+  function loadFunction($rootScope, $scope, $location, $http, $window,
                         structureService, storageService) {
 
     structureService.registerModule($location, $scope, 'tuintracallup');
 
     $scope.backButton    = backButton;
     $scope.setTeamFilter = setTeamFilter;
-    $rootScope.isBusy = true;
+    $scope.selectPlayer  = selectPlayer;
+    $rootScope.isBusy    = true;
 
     var teamId          = ($location.search().teamId) ? $location.search().teamId : false;
     var gameId          = ($location.search().gameId) ? $location.search().gameId : false;
     var userData        = {};
     var token           = 'noToken';
 
-    $scope.selectedTeam = angular.copy(teamId);
+    $scope.teamId = angular.copy(teamId);
 
     if (teamId && gameId) init();
     else                  showError('team and game Id not found');
-
 
     function init(){
       storageService.get('tuintraLogin')
@@ -64,7 +64,7 @@
     function getPlayers(){
       return $http({
         method: 'GET',
-        url: 'http://api.tuintra.com/people?teamId='+$scope.selectedTeam,
+        url: 'http://api.tuintra.com/people?teamId='+$scope.teamId,
         headers: {'x-access-token': token},
       })
       .success(function(players){
@@ -72,13 +72,37 @@
       });
     }
 
-    function setTeamFilter(selectedTeam) {
-      console.log('[S] Selected team: '+selectedTeam);
-      $scope.selectedTeam = selectedTeam;
+    function setTeamFilter() {
+      console.log('[S] Selected filter team: '+$scope.teamId);
       getPlayers()
         .then(applyScope)
         .catch(showError);
     }
+
+    function selectPlayer(playerId) {
+      if (!deletePlayer()) addPlayer();
+      applyScope();
+
+      function deletePlayer() {
+        var exist = false;
+        var position = false;
+        $scope.callup.players.forEach(function(player, index) {
+          if (player._id === playerId) {
+            position = angular.copy(index);
+            exist    = true;
+          }
+        });
+        if (exist) $scope.callup.players.splice(position, 1);
+        return exist;
+      }
+
+      function addPlayer(){
+        $scope.players.forEach(function(player) {
+          if (player._id === playerId) $scope.callup.players.push(player);
+        });
+      }
+    }
+
 
     function backButton() {
       $window.history.back();
@@ -92,6 +116,7 @@
     function applyScope() {
       if(!$scope.$$phase) {
         $scope.$apply();
+        $rootScope.$broadcast("renderKoaElements", {});
       }
       $rootScope.isBusy = false;
     }
