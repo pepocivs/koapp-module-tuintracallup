@@ -29,7 +29,7 @@
   "view": "modules/tuintracallup/index.html",
   "files": [
     "modules/tuintracallup/controller.js",
-    "modules/tuintracallup/style.CSS"
+    "modules/tuintracallup/style.css"
   ],
   "scope": {"demoKey": "demo text"},
   "libs": [],

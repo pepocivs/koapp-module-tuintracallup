@@ -1,5 +1,29 @@
 <div class="module tuintracallup" ng-controller="tuintracallupController">
-    <!-- write your module html here -->
-    <p id="hi" translate>tuintracallup.hi</p>
-    <!-- end module html -->
+  <div class='iframeLoading' ng-if="isBusy">
+    <div class='transitionloader'>
+    </div>
+  </div>
+  <koa-toolbar>
+    <koa-icon-button icon="arrow-back" ng-click="backButton()"></koa-icon-button>
+    <span class="title" translate>tuintra-callup.title</span>
+
+  </koa-toolbar>
+
+
+
+  <koa-dropdown-menu label="{{ 'tuintra-callup.teams' | translate}}">
+    <koa-listbox class="dropdown-content">
+      <koa-item is="dom-repeat" items="{{teams}}"
+        ng-click="setTeamFilter('{{team._id}}')">
+        {{team.teamName}}
+      </koa-item>
+    </koa-listbox>
+  </koa-dropdown-menu>
+
+  <pre>
+    {{callup}}
+  </pre>
+  <pre>
+    {{players}}
+  </pre>
 </div>

@@ -1,3 +1,6 @@
 {
-    "tuintracallup.hi": "Hello World!"
+  "tuintra-callup.error-loading": "Opps! Team not found",
+  "tuintra-callup.title": "Select players",
+  "tuintra-callup.teams": "Teams",
+  "tuintra-callup.notloged": "You're not logged!"
 }
