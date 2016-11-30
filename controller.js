@@ -5,10 +5,10 @@
     .module('tuintracallup', [])
     .controller('tuintracallupController', loadFunction);
 
-  loadFunction.$inject = ['$rootScope', '$scope', '$location', '$http', '$window',
+  loadFunction.$inject = ['$rootScope', '$scope', '$location', '$http', '$window', '$filter',
                           'structureService', 'storageService'];
 
-  function loadFunction($rootScope, $scope, $location, $http, $window,
+  function loadFunction($rootScope, $scope, $location, $http, $window, $filter,
                         structureService, storageService) {
 
     structureService.registerModule($location, $scope, 'tuintracallup');
@@ -16,12 +16,14 @@
     $scope.backButton    = backButton;
     $scope.setTeamFilter = setTeamFilter;
     $scope.selectPlayer  = selectPlayer;
+    $scope.sendCallup    = sendCallup;
     $rootScope.isBusy    = true;
 
     var teamId          = ($location.search().teamId) ? $location.search().teamId : false;
     var gameId          = ($location.search().gameId) ? $location.search().gameId : false;
     var userData        = {};
     var token           = 'noToken';
+    var apiServer       = 'http://api.tuintra.com/';
 
     $scope.teamId = angular.copy(teamId);
 
@@ -42,34 +44,92 @@
         getTeamFilter()
           .then(getCallUp)
           .then(getPlayers)
-          .then(applyScope)
+          .finally(applyScope)
           .catch(showError);
       }
     }
 
     function getTeamFilter(){
-      return $http.get('http://api.tuintra.com/'+userData.domain+'/teams')
+      return $http.get(apiServer+userData.domain+'/teams')
       .success(function(teams){
         $scope.teams = teams;
+
       });
     }
 
     function getCallUp(){
-      return $http.get('http://api.tuintra.com/'+userData.domain+'/callup/'+gameId+'/'+teamId)
+      return $http.get(apiServer+userData.domain+'/callup/'+gameId+'/'+teamId)
       .success(function(callUpData){
-        $scope.callup = callUpData;
+        $scope.callup    = getCallupPlayers(callUpData);
+        $scope.extraInfo = callUpData.info;
+        console.log($scope.extraInfo);
       });
     }
 
     function getPlayers(){
       return $http({
         method: 'GET',
-        url: 'http://api.tuintra.com/people?teamId='+$scope.teamId,
+        url: apiServer+'people?teamId='+$scope.teamId,
         headers: {'x-access-token': token},
       })
       .success(function(players){
         $scope.players = players;
       });
+    }
+
+    function sendCallup(){
+      var callupPrepared = {
+        "gameId": gameId,
+        "teamId": teamId,
+        "info": {
+          "clothes": ($scope.extraInfo) ? $scope.extraInfo.clothes : null,
+          "meetTime": ($scope.extraInfo) ? $scope.extraInfo.meetTime : null,
+          "meetPlace": ($scope.extraInfo) ? $scope.extraInfo.meetPlace : null,
+          "comments": ($scope.extraInfo) ? $scope.extraInfo.comments : null
+        },
+        "players": prepareCallup($scope.callup.players)
+      };
+      return $http.post(apiServer+'callup', callupPrepared, {
+        headers: {'x-access-token': token}
+      })
+      .success(function(players){
+        showError('OK -> '+players);
+      })
+      .catch(showError);
+    }
+
+    function getCallupPlayers(playerData) {
+      var preparedPlayers = [];
+      playerData.players.forEach(function(player) {
+        player.playerData.playerData = {
+          'picture': player.playerData.picture,
+          'number' : player.playerData.number,
+        };
+        delete player.playerData.picture;
+        delete player.playerData.number;
+        preparedPlayers.push(player.playerData);
+      });
+      playerData.players = preparedPlayers;
+
+      return playerData;
+    }
+
+    function prepareCallup(players) {
+      var cleanedPlayers = [];
+      players.forEach(function(playerData){
+        cleanedPlayers.push({
+          "stats": null,
+          "createdAt": new Date(),
+          "responseAt": null,
+          "sentAt": null,
+          "status": {
+            "_id": 0,
+            "text": "Sín respuesta"
+          },
+          "playerData": playerData
+        });
+      })
+      return cleanedPlayers;
     }
 
     function setTeamFilter() {
@@ -87,6 +147,7 @@
         var exist = false;
         var position = false;
         $scope.callup.players.forEach(function(player, index) {
+          console.log(player);
           if (player._id === playerId) {
             position = angular.copy(index);
             exist    = true;
@@ -109,8 +170,8 @@
     }
 
     function showError(e){
-      $scope.tuintracallupgames.message = $filter('translate')('tuintra-callup.error-loading')+' - '+e;
-      $rootScope.isBusy = false;
+      $scope.tuintracallup.message = $filter('translate')('tuintra-callup.error-loading')+' - '+e;
+      applyScope();
     }
 
     function applyScope() {

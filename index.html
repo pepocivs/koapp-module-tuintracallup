@@ -24,7 +24,6 @@
     </option>
   </select>
   <hr />
-
   <koa-button
           ng-repeat="called in callup.players"
           title="{{called.name.public}}"
@@ -46,4 +45,46 @@
           <img src="{{player.playerData.picture}}" />
           {{player.name.public}}
   </koa-button>
+  <hr />
+  <koa-button raised onclick="modal.open()">{{ 'tuintra-callup.send' | translate }}</koa-button>
+  <div ng-if="tuintracallup.message">
+    {{tuintracallup.message}}
+  </div>
 </div>
+
+
+<koa-dialog id="modal" modal>
+  {{extraInfo}}
+  <koa-input name="clothes"
+             label="{{'tuintracallup.clothes' | translate}}"
+             type="text"
+             ng-model="extraInfo.clothes"
+             auto-validate>
+             <iron-icon icon="accessibility" prefix></iron-icon>
+  </koa-input>
+  <koa-input name="meetTime"
+             label="{{'tuintracallup.meetTime' | translate}}"
+             type="text"
+             ng-model="extraInfo.meetTime"
+             auto-validate>
+             <iron-icon icon="alarm" prefix></iron-icon>
+  </koa-input>
+  <koa-input name="meetPlace"
+             label="{{'tuintracallup.meetPlace' | translate}}"
+             type="text"
+             ng-model="extraInfo.meetPlace"
+             auto-validate>
+             <iron-icon icon="room" prefix></iron-icon>
+  </koa-input>
+  <koa-input name="comments"
+             label="{{'tuintracallup.comments' | translate}}"
+             ng-model="extraInfo.comments"
+             type="text">
+             <iron-icon icon="description" prefix></iron-icon>
+
+  </koa-input>
+  <div class="buttons">
+    <koa-button onclick="modal.close()">{{'tuintracallup.close' | translate}}</koa-button>
+    <koa-button dialog-confirm autofocus ng-click="sendCallup()">{{'tuintracallup.send' | translate}}</koa-button>
+  </div>
+</koa-dialog>
